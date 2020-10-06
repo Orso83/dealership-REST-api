@@ -86,6 +86,20 @@ class InventoryGateway {
         }
 
     }
+
+    public function insertInto() {
+        // Build the query.
+        $this->query = "INSERT INTO inventory (make, model, year, color, mileage, type, price, transmission, drive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+        try {
+            $this->query = $this->db->prepare($this->query);
+            $this->query->execute(array($_POST['make'], $_POST['model'], $_POST['year'], $_POST['color'], $_POST['mileage'], $_POST['type'], $_POST['price'], $_POST['transmission'], $_POST['drive'],));
+
+            return $query->rowCount();
+        } catch(\PDOException $e) {
+                exit($e->getMessage());
+        }
+    }
 }
 
 ?>

@@ -70,11 +70,11 @@ class InventoryController {
                 if(isset($_GET['drive'])) {
                     $searchArray['drive'] = $_GET['drive'];
                 }
-                // Once the search array is built, send it to the getByCriteria() function.
-                $this->getByCriteria($searchArray);
+                // Once the search array is built, send it to the getRequest() function.
+                $this->getRequest($searchArray);
                 break;
             case 'POST':
-                echo "Successful POST request to the Controller.";
+                $this->postRequest();
                 break;
             case 'PUT':
                 echo "Successful PUT request to the Controller.";
@@ -88,8 +88,15 @@ class InventoryController {
         }
     }
 
-    private function getByCriteria($searchArray) {
+    private function getRequest($searchArray) {
         $result = $this->inventoryGateway->findByCriteria($searchArray);
+        $result = json_encode($result);
+        $data = json_decode($result);
+        print_r($result);
+    }
+
+    private function postRequest() {
+        $this->inventoryGateway->insertInto();
         $result = json_encode($result);
         $data = json_decode($result);
         print_r($result);
