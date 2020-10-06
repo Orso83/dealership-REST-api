@@ -80,7 +80,7 @@ class InventoryController {
                 echo "Successful PUT request to the Controller.";
                 break;
             case 'DELETE':
-                echo "Successful DELETE request to the Controller.";
+                $this->deleteRequest();
                 break;
             default:
                 echo "HTTP request not Found.";
@@ -96,7 +96,14 @@ class InventoryController {
     }
 
     private function postRequest() {
-        $this->inventoryGateway->insertInto();
+        $result = $this->inventoryGateway->insertInto();
+        $result = json_encode($result);
+        $data = json_decode($result);
+        print_r($result);
+    }
+
+    private function deleteRequest() {
+        $result = $this->inventoryGateway->removeItem();
         $result = json_encode($result);
         $data = json_decode($result);
         print_r($result);

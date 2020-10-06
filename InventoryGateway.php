@@ -100,6 +100,20 @@ class InventoryGateway {
                 exit($e->getMessage());
         }
     }
+
+    public function removeItem() {
+        // Build the query.
+        $this->query = "DELETE FROM inventory WHERE id = ?;";
+
+        try {
+            $this->query = $this->db->prepare($this->query);
+            $this->query->execute(array($_GET['id']));
+
+            return $query->rowCount();
+        } catch(\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
 }
 
 ?>
