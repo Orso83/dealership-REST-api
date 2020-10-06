@@ -77,7 +77,7 @@ class InventoryController {
                 $this->postRequest();
                 break;
             case 'PUT':
-                echo "Successful PUT request to the Controller.";
+                
                 break;
             case 'DELETE':
                 $this->deleteRequest();
@@ -97,15 +97,15 @@ class InventoryController {
 
     private function postRequest() {
         $result = $this->inventoryGateway->insertItem();
-        // $result = json_encode($result);
-        // $data = json_decode($result);
+        $result = json_encode($result);
+        $data = json_decode($result);
         print_r($result);
     }
 
     private function deleteRequest() {
         $result = $this->inventoryGateway->removeItem();
-        // $result = json_encode($result);
-        // $data = json_decode($result);
+        $result = json_encode($result);
+        $data = json_decode($result);
         print_r($result);
     }
 }

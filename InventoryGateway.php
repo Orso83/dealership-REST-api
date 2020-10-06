@@ -96,8 +96,8 @@ class InventoryGateway {
             $this->query->execute(array($_POST['make'], $_POST['model'], $_POST['year'], $_POST['color'], $_POST['mileage'], $_POST['type'], $_POST['price'], $_POST['transmission'], $_POST['drive'],));
 
             // Check if any rows were added.
-            if($this->query->rowCount() > 1) {
-                return $this->query->rowCount() . " item has been added.";
+            if($this->query->rowCount() == 1) {
+                return "The vehical has been added to the inventory.";
             } else {
                 return "Sorry, we did not find any matches. No items where added.";
             }
@@ -116,8 +116,8 @@ class InventoryGateway {
             $this->query->execute(array($_GET['id']));
 
             // Check if any row where deleted.
-            if($this->query->rowCount() > 1) {
-                return $this->query->rowCount() . " item has been deleted.";
+            if($this->query->rowCount() == 1) {
+                return "The vehical has been removed from the inventory.";
             } else {
                 return "Sorry, we did not find any matches. No items where deleted.";
             }
