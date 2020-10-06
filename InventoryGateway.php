@@ -87,7 +87,7 @@ class InventoryGateway {
 
     }
 
-    public function insertInto() {
+    public function insertItem() {
         // Build the query.
         $this->query = "INSERT INTO inventory (make, model, year, color, mileage, type, price, transmission, drive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
@@ -95,7 +95,13 @@ class InventoryGateway {
             $this->query = $this->db->prepare($this->query);
             $this->query->execute(array($_POST['make'], $_POST['model'], $_POST['year'], $_POST['color'], $_POST['mileage'], $_POST['type'], $_POST['price'], $_POST['transmission'], $_POST['drive'],));
 
-            return $query->rowCount();
+            // Check if any rows were added.
+            if($this->query->rowCount() > 1) {
+                return $this->query->rowCount() . " item has been added.";
+            } else {
+                return "Sorry, we did not find any matches. No items where added.";
+            }
+            
         } catch(\PDOException $e) {
                 exit($e->getMessage());
         }
@@ -109,7 +115,12 @@ class InventoryGateway {
             $this->query = $this->db->prepare($this->query);
             $this->query->execute(array($_GET['id']));
 
-            return $query->rowCount();
+            // Check if any row where deleted.
+            if($this->query->rowCount() > 1) {
+                return $this->query->rowCount() . " item has been deleted.";
+            } else {
+                return "Sorry, we did not find any matches. No items where deleted.";
+            }
         } catch(\PDOException $e) {
             exit($e->getMessage());
         }

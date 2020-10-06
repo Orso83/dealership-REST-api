@@ -96,16 +96,16 @@ class InventoryController {
     }
 
     private function postRequest() {
-        $result = $this->inventoryGateway->insertInto();
-        $result = json_encode($result);
-        $data = json_decode($result);
+        $result = $this->inventoryGateway->insertItem();
+        // $result = json_encode($result);
+        // $data = json_decode($result);
         print_r($result);
     }
 
     private function deleteRequest() {
         $result = $this->inventoryGateway->removeItem();
-        $result = json_encode($result);
-        $data = json_decode($result);
+        // $result = json_encode($result);
+        // $data = json_decode($result);
         print_r($result);
     }
 }
