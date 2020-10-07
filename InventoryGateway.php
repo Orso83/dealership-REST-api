@@ -71,7 +71,7 @@ class InventoryGateway {
             // Try to run the SQL query.
             try {
                 $this->query = $this->db->prepare($this->query);
-                $this->query->execute(array($searchArray[$keys[0]]));
+                $this->query->execute();
                 $result = $this->query->fetchAll(\PDO::FETCH_ASSOC);
     
                 // Check if no results where returned.
@@ -88,6 +88,7 @@ class InventoryGateway {
     }
 
     public function insertItem() {
+
         // Build the query.
         $this->query = "INSERT INTO inventory (make, model, year, color, mileage, type, price, transmission, drive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
@@ -108,6 +109,7 @@ class InventoryGateway {
     }
 
     public function removeItem() {
+
         // Build the query.
         $this->query = "DELETE FROM inventory WHERE id = ?;";
 
@@ -115,12 +117,46 @@ class InventoryGateway {
             $this->query = $this->db->prepare($this->query);
             $this->query->execute(array($_GET['id']));
 
-            // Check if any row where deleted.
+            // Check if any rows where deleted.
             if($this->query->rowCount() == 1) {
                 return "The vehical has been removed from the inventory.";
             } else {
                 return "Sorry, we did not find any matches. No items where deleted.";
             }
+        } catch(\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    public function updateItem($id, $searchArray) {
+
+        // Get the array's keys so we can iterate through the array with indexs.
+        $keys = array_keys($searchArray);
+
+        // Build the base of the query.
+        $this->query = "UPDATE inventory SET ";
+
+        // Add the first update critiria to the query.
+        $this->query .= $keys[0] . " = \"" . $searchArray[$keys[0]] . "\"";
+
+        // If there are more than one update critiria, add them to the query.
+        if(count($searchArray) > 0) {
+            for($i = 1; $i < count($searchArray); $i++) {
+                $this->query .= ", " . $keys[$i] . " = \"" . $searchArray[$keys[$i]] . "\"";
+            }
+        }
+
+        // Add the 'id' to the WHERE condition of the query.
+        $this->query .= " WHERE id = " . $id;
+
+        // After the query has been built add a semicolon to the end.
+        $this->query .= ";";
+        echo $this->query;
+        // Try to run the SQL query.
+        try {
+            $this->query = $this->db->prepare($this->query);
+            $this->query->execute();
+            return $result;
         } catch(\PDOException $e) {
             exit($e->getMessage());
         }

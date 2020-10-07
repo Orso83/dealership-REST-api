@@ -8,8 +8,7 @@ class InventoryController {
     private $inventoryGateway;
 
     private $searchArray = array();
-    private $make;
-    private $transmission;
+    private $id;
 
     // Constructor.
     public function __construct($db, $requestMethod) {
@@ -77,7 +76,39 @@ class InventoryController {
                 $this->postRequest();
                 break;
             case 'PUT':
-                
+                // Get the 'id' for the item that will be updated.
+                $this->id = $_GET['id'];
+
+                // Check the URL for GET criteria and add them to the array of search critira.
+                if(isset($_GET['make'])) {
+                    $searchArray['make'] = $_GET['make'];
+                }
+                if(isset($_GET['model'])) {
+                    $searchArray['model'] = $_GET['model'];
+                }
+                if(isset($_GET['year'])) {
+                    $searchArray['year'] = $_GET['year'];
+                }
+                if(isset($_GET['color'])) {
+                    $searchArray['color'] = $_GET['color'];
+                }
+                if(isset($_GET['mileage'])) {
+                    $searchArray['mileage'] = $_GET['mileage'];
+                }
+                if(isset($_GET['type'])) {
+                    $searchArray['type'] = $_GET['type'];
+                }
+                if(isset($_GET['price'])) {
+                    $searchArray['price'] = $_GET['price'];
+                }
+                if(isset($_GET['transmission'])) {
+                    $searchArray['transmission'] = $_GET['transmission'];
+                }
+                if(isset($_GET['drive'])) {
+                    $searchArray['drive'] = $_GET['drive'];
+                }
+
+                $this->updateRequest($this->id, $searchArray);
                 break;
             case 'DELETE':
                 $this->deleteRequest();
@@ -104,6 +135,13 @@ class InventoryController {
 
     private function deleteRequest() {
         $result = $this->inventoryGateway->removeItem();
+        $result = json_encode($result);
+        $data = json_decode($result);
+        print_r($result);
+    }
+
+    private function updateRequest($id, $searchArray) {
+        $result = $this->inventoryGateway->updateItem($id, $searchArray);
         $result = json_encode($result);
         $data = json_decode($result);
         print_r($result);
