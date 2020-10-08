@@ -4,6 +4,8 @@ class InventoryGateway {
 
     private $db = null;
     private $query = "SELECT * FROM inventory WHERE ";
+    private $keys = array();
+    private $values = array();
 
     // Constructor.
     public function __construct($db) {
@@ -131,18 +133,23 @@ class InventoryGateway {
     public function updateItem($id, $searchArray) {
 
         // Get the array's keys so we can iterate through the array with indexs.
-        $keys = array_keys($searchArray);
+        $this->keys = array_keys($searchArray);
+
+        // Fill an array with values from the key/value pairs to use with PDO prepare.
+        for($i = 0; $i < count($searchArray); $i++) {
+            $this->values[] = $searchArray[$this->keys[$i]];
+        }
 
         // Build the base of the query.
         $this->query = "UPDATE inventory SET ";
 
         // Add the first update critiria to the query.
-        $this->query .= $keys[0] . " = \"" . $searchArray[$keys[0]] . "\"";
+        $this->query .= $this->keys[0] . " = ?";
 
         // If there are more than one update critiria, add them to the query.
         if(count($searchArray) > 0) {
             for($i = 1; $i < count($searchArray); $i++) {
-                $this->query .= ", " . $keys[$i] . " = \"" . $searchArray[$keys[$i]] . "\"";
+                $this->query .= ", " . $this->keys[$i] . " = ?";
             }
         }
 
@@ -151,11 +158,11 @@ class InventoryGateway {
 
         // After the query has been built add a semicolon to the end.
         $this->query .= ";";
-        echo $this->query;
+
         // Try to run the SQL query.
         try {
             $this->query = $this->db->prepare($this->query);
-            $this->query->execute();
+            $this->query->execute($this->values);
             return $result;
         } catch(\PDOException $e) {
             exit($e->getMessage());

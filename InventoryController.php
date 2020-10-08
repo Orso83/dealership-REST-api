@@ -142,9 +142,9 @@ class InventoryController {
 
     private function updateRequest($id, $searchArray) {
         $result = $this->inventoryGateway->updateItem($id, $searchArray);
-        $result = json_encode($result);
-        $data = json_decode($result);
-        print_r($result);
+        // $result = json_encode($result);
+        // $data = json_decode($result);
+        // print_r($result);
     }
 }
 
