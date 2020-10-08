@@ -1,4 +1,6 @@
 <?php
+// Author: Christopher Orsolini
+
 require './InventoryGateway.php';
 
 class InventoryController {
@@ -18,7 +20,14 @@ class InventoryController {
         $this->inventoryGateway = new InventoryGateway($db);
     }
 
-    // Proccess the http request method.
+    /**************************************************************************
+    * Purpose: This function handles all http request methods and calls the   *
+    *          appropriate handling function.                                 *
+    *                                                                         *
+    * Inputs:  None.                                                          *
+    *                                                                         *
+    * Output:  An message if the https request method is not accepted.        *
+    **************************************************************************/
     public function processRequest() {
 
         switch ($this->requestMethod) {
@@ -111,7 +120,8 @@ class InventoryController {
                 $this->updateRequest($this->id, $searchArray);
                 break;
             case 'DELETE':
-                $this->deleteRequest();
+                $this->id = $_GET['id'];
+                $this->deleteRequest($this->id);
                 break;
             default:
                 echo "HTTP request not Found.";
@@ -119,6 +129,14 @@ class InventoryController {
         }
     }
 
+    /**************************************************************************
+    * Purpose: This function handles any GET http request by calling the      *
+    *          appropriate function from the gateway.                         *
+    *                                                                         *
+    * Inputs:  An assocative array containing the search critiria.            *
+    *                                                                         *
+    * Output:  JSON containing the returned results.                          *
+    **************************************************************************/
     private function getRequest($searchArray) {
         $result = $this->inventoryGateway->findByCriteria($searchArray);
         $result = json_encode($result);
@@ -126,6 +144,14 @@ class InventoryController {
         print_r($result);
     }
 
+    /**************************************************************************
+    * Purpose: This function handles any POST http request by calling the     *
+    *          appropriate function from the gateway.                         *
+    *                                                                         *
+    * Inputs:  None.                                                          *
+    *                                                                         *
+    * Output:  JSON containing the returned results.                          *
+    **************************************************************************/
     private function postRequest() {
         $result = $this->inventoryGateway->insertItem();
         $result = json_encode($result);
@@ -133,18 +159,35 @@ class InventoryController {
         print_r($result);
     }
 
-    private function deleteRequest() {
-        $result = $this->inventoryGateway->removeItem();
+    /**************************************************************************
+    * Purpose: This function handles any DELETE http request by calling the   *
+    *          appropriate function from the gateway.                         *
+    *                                                                         *
+    * Inputs:  A id for the item that will be deleted.                        *
+    *                                                                         *
+    * Output:  JSON containing any message from the result.                   *
+    **************************************************************************/
+    private function deleteRequest($id) {
+        $result = $this->inventoryGateway->removeItem($id);
         $result = json_encode($result);
         $data = json_decode($result);
         print_r($result);
     }
 
+    /**************************************************************************
+    * Purpose: This function handles any PUT http request by calling the      *
+    *          appropriate function from the gateway.                         *
+    *                                                                         *
+    * Inputs:  The id for the item that will be updated.                      *
+    *          An assocative array containing the search critiria.            *
+    *                                                                         *
+    * Output:  JSON containing any message from the result.                   *
+    **************************************************************************/
     private function updateRequest($id, $searchArray) {
         $result = $this->inventoryGateway->updateItem($id, $searchArray);
-        // $result = json_encode($result);
-        // $data = json_decode($result);
-        // print_r($result);
+        $result = json_encode($result);
+        $data = json_decode($result);
+        print_r($result);
     }
 }
 

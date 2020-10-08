@@ -1,4 +1,5 @@
 <?php
+// Author: Christopher Orsolini
 
 class InventoryGateway {
 
@@ -12,11 +13,27 @@ class InventoryGateway {
         $this->db = $db;
     }
 
-    // Find vehicles by key value pair.
+    /**************************************************************************
+    * Purpose: This function handles all SELECT querys. The defualt behavior  *
+    *          is to SELECT all items from the inventory table. If an array   *
+    *          is passed in, the query will search based on the provided      *
+    *          conditions. If there is more than one search critiria, the     *
+    *          query will add and AND for each additonal WHERE condition. The *
+    *          query is created using the PDO prepare statement.              *
+    *                                                                         *
+    * Inputs:  An associative array. Keys = column name. Values = condition.  *
+    *                                                                         *
+    * Output:  An associative array of results, or an exception.              *
+    **************************************************************************/
     public function findByCriteria($searchArray) {
 
         // Get the array's keys so we can iterate through the array with indexs.
-        $keys = array_keys($searchArray);
+        $this->keys = array_keys($searchArray);
+
+        // Fill an array with values from the key/value pairs to use with PDO prepare.
+        for($i = 0; $i < count($searchArray); $i++) {
+            $this->values[] = $searchArray[$this->keys[$i]];
+        }
 
         // If the array is empty, return all rows from the inventory.
         if(count($searchArray) == 0) {
@@ -32,38 +49,38 @@ class InventoryGateway {
         } else {
 
             // Add the first search criteria to the query depending on operator.
-            if($keys[0] == "yearFrom") {                // Year > x.
-                $this->query .= " year >= \"" . $searchArray[$keys[0]] . "\"";
-            } else if($keys[0] == "yearTo") {           // Year < x.
-                $this->query .= " year <= \"" . $searchArray[$keys[0]] . "\"";
-            } else if($keys[0] == "mileageFrom") {      // Mileage > x.
-                $this->query .= " mileage >= \"" . $searchArray[$keys[0]] . "\"";
-            } else if($keys[0] == "mileageTo") {        // Mileage < x.
-                $this->query .= " mileage <= \"" . $searchArray[$keys[0]] . "\"";
-            } else if($keys[0] == "priceFrom") {        // Price > x.
-                $this->query .= " price >= \"" . $searchArray[$keys[0]] . "\"";
-            } else if($keys[0] == "priceTo") {          // Price < x.
-                $this->query .= " price <= \"" . $searchArray[$keys[0]] . "\"";
+            if($this->keys[0] == "yearFrom") {                // Year > x.
+                $this->query .= " year >= ?";
+            } else if($this->keys[0] == "yearTo") {           // Year < x.
+                $this->query .= " year <= ?";
+            } else if($this->keys[0] == "mileageFrom") {      // Mileage > x.
+                $this->query .= " mileage >= ?";
+            } else if($this->keys[0] == "mileageTo") {        // Mileage < x.
+                $this->query .= " mileage <= ?";
+            } else if($this->keys[0] == "priceFrom") {        // Price > x.
+                $this->query .= " price >= ?";
+            } else if($this->keys[0] == "priceTo") {          // Price < x.
+                $this->query .= " price <= ?";
             } else {                            
-                $this->query .= $keys[0] . " = \"" . $searchArray[$keys[0]] . "\"";
+                $this->query .= $this->keys[0] . " = ?";
             }
 
             // For any additional search conditions add a "AND" and the criteria.
             for($i = 1; $i < count($searchArray); $i++) {
-                if($keys[$i] == "yearFrom") {           // Year > x.
-                    $this->query .= " AND year >= \"" . $searchArray[$keys[$i]] . "\"";
-                } else if($keys[$i] == "yearTo") {      // Year < x.
-                    $this->query .= " AND year <= \"" . $searchArray[$keys[$i]] . "\"";
-                } else if($keys[$i] == "mileageFrom") { // Mileage > x.
-                    $this->query .= " AND mileage >= \"" . $searchArray[$keys[$i]] . "\"";
-                } else if($keys[$i] == "mileageTo") {   // Mileage < x.
-                    $this->query .= " AND mileage <= \"" . $searchArray[$keys[$i]] . "\"";
-                } else if($keys[$i] == "priceFrom") {   // Price > x.
-                    $this->query .= " AND price >= \"" . $searchArray[$keys[$i]] . "\"";
-                } else if($keys[$i] == "priceTo") {     // Price < x.
-                    $this->query .= " AND price <= \"" . $searchArray[$keys[$i]] . "\"";
+                if($this->keys[$i] == "yearFrom") {           // Year > x.
+                    $this->query .= " AND year >= ?";
+                } else if($this->keys[$i] == "yearTo") {      // Year < x.
+                    $this->query .= " AND year <= ?";
+                } else if($this->keys[$i] == "mileageFrom") { // Mileage > x.
+                    $this->query .= " AND mileage >= ?";
+                } else if($this->keys[$i] == "mileageTo") {   // Mileage < x.
+                    $this->query .= " AND mileage <= ?";
+                } else if($this->keys[$i] == "priceFrom") {   // Price > x.
+                    $this->query .= " AND price >= ?";
+                } else if($this->keys[$i] == "priceTo") {     // Price < x.
+                    $this->query .= " AND price <= ?";
                 } else {
-                    $this->query .= " AND " . $keys[$i] . " = \"" . $searchArray[$keys[$i]] . "\"";
+                    $this->query .= " AND " . $this->keys[$i] . " = ?";
                 }
             }
 
@@ -73,7 +90,7 @@ class InventoryGateway {
             // Try to run the SQL query.
             try {
                 $this->query = $this->db->prepare($this->query);
-                $this->query->execute();
+                $this->query->execute($this->values);
                 $result = $this->query->fetchAll(\PDO::FETCH_ASSOC);
     
                 // Check if no results where returned.
@@ -89,6 +106,15 @@ class InventoryGateway {
 
     }
 
+    /**************************************************************************
+    * Purpose: This function handles all INSERT querys. It takes values from  *
+    *          $_POST and appends them to the query with the PDO prepare      *
+    *          statement.                                                     *
+    *                                                                         *
+    * Inputs:  None.                                                          *
+    *                                                                         *
+    * Output:  An success message, fail message, or an exception.             *
+    **************************************************************************/
     public function insertItem() {
 
         // Build the query.
@@ -110,14 +136,23 @@ class InventoryGateway {
         }
     }
 
-    public function removeItem() {
+    /**************************************************************************
+    * Purpose: This function handles all DELETE querys. A id is passed in for *
+    *          the item that is to be deleted. The id is appended with the    *
+    *          PDO prepare statment.                                          *
+    *                                                                         *
+    * Inputs:  Id for the item that has been selected for deletion.           *
+    *                                                                         *
+    * Output:  An success message, fail message, or an exception.             *
+    **************************************************************************/
+    public function removeItem($id) {
 
         // Build the query.
         $this->query = "DELETE FROM inventory WHERE id = ?;";
 
         try {
             $this->query = $this->db->prepare($this->query);
-            $this->query->execute(array($_GET['id']));
+            $this->query->execute(array($id));
 
             // Check if any rows where deleted.
             if($this->query->rowCount() == 1) {
@@ -130,6 +165,20 @@ class InventoryGateway {
         }
     }
 
+    /**************************************************************************
+    * Purpose: This function handles all UPDATE querys. An id for the item    *
+    *          that is to be updated is passed in. An associative array is    *
+    *          also passed in. The query will search based on the provided    *
+    *          conditions. If there is more than one search critiria, the     *
+    *          query will add and "," for each additonal SET condition.       *
+    *          The query is created using the PDO prepare statement.          *
+    *                                                                         *
+    * Inputs:  Id for the item that has been selected for deletion.           *
+    *          Associative array with key/value pairs for update conditions.  *
+    *          Keys = column name. Values = condition.                        *
+    *                                                                         *
+    * Output:  An exception.                                                  *
+    **************************************************************************/
     public function updateItem($id, $searchArray) {
 
         // Get the array's keys so we can iterate through the array with indexs.
