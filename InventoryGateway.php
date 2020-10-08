@@ -212,7 +212,13 @@ class InventoryGateway {
         try {
             $this->query = $this->db->prepare($this->query);
             $this->query->execute($this->values);
-            return $result;
+            
+            // Check if any rows where deleted.
+            if($this->query->rowCount() == 1) {
+                return "The vehical has been updated in the inventory.";
+            } else {
+                return "Sorry, we did not find any matches. No items where updated.";
+            }
         } catch(\PDOException $e) {
             exit($e->getMessage());
         }
