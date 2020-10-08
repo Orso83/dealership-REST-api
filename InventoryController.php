@@ -140,7 +140,6 @@ class InventoryController {
     private function getRequest($searchArray) {
         $result = $this->inventoryGateway->findByCriteria($searchArray);
         $result = json_encode($result);
-        $data = json_decode($result);
         print_r($result);
     }
 
@@ -155,7 +154,6 @@ class InventoryController {
     private function postRequest() {
         $result = $this->inventoryGateway->insertItem();
         $result = json_encode($result);
-        $data = json_decode($result);
         print_r($result);
     }
 
@@ -170,7 +168,6 @@ class InventoryController {
     private function deleteRequest($id) {
         $result = $this->inventoryGateway->removeItem($id);
         $result = json_encode($result);
-        $data = json_decode($result);
         print_r($result);
     }
 
@@ -186,7 +183,6 @@ class InventoryController {
     private function updateRequest($id, $searchArray) {
         $result = $this->inventoryGateway->updateItem($id, $searchArray);
         $result = json_encode($result);
-        $data = json_decode($result);
         print_r($result);
     }
 }
