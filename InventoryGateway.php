@@ -36,7 +36,7 @@ class InventoryGateway {
         }
 
         // If the array is empty, return all rows from the inventory.
-        if(count($searchArray) == 0) {
+        if(count($searchArray) == 0 || $searchArray['make'] == 'All') {
             // Try to run the SQL query.
             try {
                 $this->query = $this->db->query("SELECT * FROM inventory;");
