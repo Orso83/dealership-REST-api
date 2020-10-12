@@ -25,7 +25,7 @@ class InventoryGateway {
     public function getAllDistinct() {
         // Try to run the SQL query.
         try {
-            $this->query = $this->db->query("SELECT DISTINCT make FROM inventory;");
+            $this->query = $this->db->query("SELECT DISTINCT make FROM inventory ORDER BY make;");
             $result =  $this->query->fetchAll(\PDO::FETCH_ASSOC);
             return $result;
         } catch(\PDOException $e) {
