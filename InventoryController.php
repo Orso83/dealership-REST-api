@@ -32,9 +32,29 @@ class InventoryController {
 
         switch ($this->requestMethod) {
             case 'GET':
-                // Check for the select distinct flag.
-                if($_GET['distinct'] == 1) {
-                    $this->getDistinct();
+                // Check for the select distinctMake flag.
+                if($_GET['distinctMake'] == 1) {
+                    $this->getDistinctMake();
+                    break;
+                }
+                // Check for the select distinctColor flag.
+                if($_GET['distinctColor'] == 1) {
+                    $this->getDistinctColor();
+                    break;
+                }
+                // Check for the select distinctType flag.
+                if($_GET['distinctType'] == 1) {
+                    $this->getDistinctType();
+                    break;
+                }
+                // Check for the select distinctTransmission flag.
+                if($_GET['distinctTransmission'] == 1) {
+                    $this->getDistinctTransmission();
+                    break;
+                }
+                // Check for the select distinctDrivetrain flag.
+                if($_GET['distinctDrivetrain'] == 1) {
+                    $this->getDistinctDrivetrain();
                     break;
                 }
 
@@ -136,8 +156,32 @@ class InventoryController {
         }
     }
 
-    private function getDistinct() {
-        $result = $this->inventoryGateway->getAllDistinct();
+    private function getDistinctMake() {
+        $result = $this->inventoryGateway->findDistinctMake();
+        $result = json_encode($result);
+        print_r($result);
+    }
+
+    private function getDistinctColor() {
+        $result = $this->inventoryGateway->findDistinctColor();
+        $result = json_encode($result);
+        print_r($result);
+    }
+
+    private function getDistinctType() {
+        $result = $this->inventoryGateway->findDistinctType();
+        $result = json_encode($result);
+        print_r($result);
+    }
+
+    private function getDistinctTransmission() {
+        $result = $this->inventoryGateway->findDistinctTransmission();
+        $result = json_encode($result);
+        print_r($result);
+    }
+
+    private function getDistinctDrivetrain() {
+        $result = $this->inventoryGateway->findDistinctDrivetrain();
         $result = json_encode($result);
         print_r($result);
     }

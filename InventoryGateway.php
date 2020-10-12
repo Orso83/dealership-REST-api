@@ -22,10 +22,90 @@ class InventoryGateway {
     *                                                                         *
     * Output:  An associative array of results, or an exception.              *
     **************************************************************************/
-    public function getAllDistinct() {
+    public function findDistinctMake() {
         // Try to run the SQL query.
         try {
             $this->query = $this->db->query("SELECT DISTINCT make FROM inventory ORDER BY make;");
+            $result =  $this->query->fetchAll(\PDO::FETCH_ASSOC);
+            return $result;
+        } catch(\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    /**************************************************************************
+    * Purpose: This function will make a SELECT DISTINCT on the colors.       *
+    *          The result will be used to fill the html form select options   *
+    *          for the select color dropdown in the UI.                       *
+    *                                                                         *
+    * Inputs:  None.                                                          *
+    *                                                                         *
+    * Output:  An associative array of results, or an exception.              *
+    **************************************************************************/
+    public function findDistinctColor() {
+        // Try to run the SQL query.
+        try {
+            $this->query = $this->db->query("SELECT DISTINCT color FROM inventory ORDER BY color;");
+            $result =  $this->query->fetchAll(\PDO::FETCH_ASSOC);
+            return $result;
+        } catch(\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    /**************************************************************************
+    * Purpose: This function will make a SELECT DISTINCT on the type.         *
+    *          The result will be used to fill the html form select options   *
+    *          for the select color dropdown in the UI.                       *
+    *                                                                         *
+    * Inputs:  None.                                                          *
+    *                                                                         *
+    * Output:  An associative array of results, or an exception.              *
+    **************************************************************************/
+    public function findDistinctType() {
+        // Try to run the SQL query.
+        try {
+            $this->query = $this->db->query("SELECT DISTINCT type FROM inventory ORDER BY type;");
+            $result =  $this->query->fetchAll(\PDO::FETCH_ASSOC);
+            return $result;
+        } catch(\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    /**************************************************************************
+    * Purpose: This function will make a SELECT DISTINCT on the transmission. *
+    *          The result will be used to fill the html form select options   *
+    *          for the select color dropdown in the UI.                       *
+    *                                                                         *
+    * Inputs:  None.                                                          *
+    *                                                                         *
+    * Output:  An associative array of results, or an exception.              *
+    **************************************************************************/
+    public function findDistinctTransmission() {
+        // Try to run the SQL query.
+        try {
+            $this->query = $this->db->query("SELECT DISTINCT transmission FROM inventory ORDER BY transmission;");
+            $result =  $this->query->fetchAll(\PDO::FETCH_ASSOC);
+            return $result;
+        } catch(\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    /**************************************************************************
+    * Purpose: This function will make a SELECT DISTINCT on the drivetrain.   *
+    *          The result will be used to fill the html form select options   *
+    *          for the select color dropdown in the UI.                       *
+    *                                                                         *
+    * Inputs:  None.                                                          *
+    *                                                                         *
+    * Output:  An associative array of results, or an exception.              *
+    **************************************************************************/
+    public function findDistinctDrivetrain() {
+        // Try to run the SQL query.
+        try {
+            $this->query = $this->db->query("SELECT DISTINCT drive FROM inventory ORDER BY drive;");
             $result =  $this->query->fetchAll(\PDO::FETCH_ASSOC);
             return $result;
         } catch(\PDOException $e) {
