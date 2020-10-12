@@ -14,6 +14,26 @@ class InventoryGateway {
     }
 
     /**************************************************************************
+    * Purpose: This function will make a SELECT DISTINCT on the makes.        *
+    *          The result will be used to fill the html form select options   *
+    *          for the select make dropdown in the UI.
+    *                                                                         *
+    * Inputs:  None.                                                          *
+    *                                                                         *
+    * Output:  An associative array of results, or an exception.              *
+    **************************************************************************/
+    public function getAllDistinct() {
+        // Try to run the SQL query.
+        try {
+            $this->query = $this->db->query("SELECT DISTINCT make FROM inventory;");
+            $result =  $this->query->fetchAll(\PDO::FETCH_ASSOC);
+            return $result;
+        } catch(\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    /**************************************************************************
     * Purpose: This function handles all SELECT querys. The defualt behavior  *
     *          is to SELECT all items from the inventory table. If an array   *
     *          is passed in, the query will search based on the provided      *

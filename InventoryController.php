@@ -32,6 +32,12 @@ class InventoryController {
 
         switch ($this->requestMethod) {
             case 'GET':
+                // Check for the select distinct flag.
+                if($_GET['distinct'] == 1) {
+                    $this->getDistinct();
+                    break;
+                }
+
                 // Check the URL for GET criteria and add them to the array of search critira.
                 if(isset($_GET['make'])) {
                     $searchArray['make'] = $_GET['make'];
@@ -78,6 +84,7 @@ class InventoryController {
                 if(isset($_GET['drive'])) {
                     $searchArray['drive'] = $_GET['drive'];
                 }
+
                 // Once the search array is built, send it to the getRequest() function.
                 $this->getRequest($searchArray);
                 break;
@@ -127,6 +134,12 @@ class InventoryController {
                 echo "HTTP request not Found.";
                 break;
         }
+    }
+
+    private function getDistinct() {
+        $result = $this->inventoryGateway->getAllDistinct();
+        $result = json_encode($result);
+        print_r($result);
     }
 
     /**************************************************************************
