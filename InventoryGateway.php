@@ -137,14 +137,94 @@ class InventoryGateway {
 
         // If the array is empty, return all rows from the inventory.
         if(count($searchArray) == 0) {
+
+            // If there is ORDER BY critiria.
+            if(isset($_GET['orderByMake'])) {
+                if($_GET['orderByMake'] == 0){
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY make ASC;";
+                } else if ($_GET['orderByMake'] == 1) {
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY make DESC;";
+                }
+            } else if (isset($_GET['orderByModel'])) {
+                if($_GET['orderByModel'] == 0){
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY model ASC;";
+                } else if ($_GET['orderByModel'] == 1) {
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY model DESC;";
+                }
+            } else if (isset($_GET['orderByYear'])) {
+                if($_GET['orderByYear'] == 0){
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY year ASC;";
+                } else if ($_GET['orderByYear'] == 1) {
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY year DESC;";
+                }
+            } else if (isset($_GET['orderByColor'])) {
+                if($_GET['orderByColor'] == 0){
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY color ASC;";
+                } else if ($_GET['orderByColor'] == 1) {
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY color DESC;";
+                }
+            } else if (isset($_GET['orderByMileage'])) {
+                if($_GET['orderByMileage'] == 0){
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY mileage ASC;";
+                } else if ($_GET['orderByMileage'] == 1) {
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY mileage DESC;";
+                }
+            } else if (isset($_GET['orderByType'])) {
+                if($_GET['orderByType'] == 0){
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY type ASC;";
+                } else if ($_GET['orderByType'] == 1) {
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY type DESC;";
+                }
+            } else if (isset($_GET['orderByPrice'])) {
+                if($_GET['orderByPrice'] == 0){
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY price ASC;";
+                } else if ($_GET['orderByPrice'] == 1) {
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY price DESC;";
+                }
+            } else if (isset($_GET['orderByTransmission'])) {
+                if($_GET['orderByTransmission'] == 0){
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY transmission ASC;";
+                } else if ($_GET['orderByTransmission'] == 1) {
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY transmission DESC;";
+                }
+            } else if (isset($_GET['orderByDrive'])) {
+                if($_GET['orderByDrive'] == 0){
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY drive ASC;";
+                } else if ($_GET['orderByDrive'] == 1) {
+                    // Build the query.
+                    $this->query = "SELECT * FROM inventory ORDER BY drive DESC;";
+                }
+            } else {    // If no ORDER BY criteria is set.
+                $this->query = "SELECT * FROM inventory;";
+            }
+
             // Try to run the SQL query.
             try {
-                $this->query = $this->db->query("SELECT * FROM inventory;");
+                $this->query = $this->db->query($this->query);
                 $result =  $this->query->fetchAll(\PDO::FETCH_ASSOC);
                 return $result;
             } catch(\PDOException $e) {
                 exit($e->getMessage());
             }
+
+            
         // If the array contains key/value pairs, search based on provided key/values.
         } else {
 
@@ -165,7 +245,7 @@ class InventoryGateway {
                 $this->query .= $this->keys[0] . " = ?";
             }
 
-            // For any additional search conditions add a "AND" and the criteria.
+            // For any additional search conditions add an "AND" to the criteria.
             for($i = 1; $i < count($searchArray); $i++) {
                 if($this->keys[$i] == "yearFrom") {           // Year > x.
                     $this->query .= " AND year >= ?";
@@ -181,6 +261,81 @@ class InventoryGateway {
                     $this->query .= " AND price <= ?";
                 } else {
                     $this->query .= " AND " . $this->keys[$i] . " = ?";
+                }
+            }
+
+            // If there is ORDER BY critiria.
+            if(isset($_GET['orderByMake'])) {
+                if($_GET['orderByMake'] == 0){
+                    // Build the query.
+                    $this->query .= " ORDER BY make ASC;";
+                } else if ($_GET['orderByMake'] == 1) {
+                    // Build the query.
+                    $this->query .= " ORDER BY make DESC;";
+                }
+            } else if (isset($_GET['orderByModel'])) {
+                if($_GET['orderByModel'] == 0){
+                    // Build the query.
+                    $this->query .= " ORDER BY model ASC;";
+                } else if ($_GET['orderByModel'] == 1) {
+                    // Build the query.
+                    $this->query .= " ORDER BY model DESC;";
+                }
+            } else if (isset($_GET['orderByYear'])) {
+                if($_GET['orderByYear'] == 0){
+                    // Build the query.
+                    $this->query .= " ORDER BY year ASC;";
+                } else if ($_GET['orderByYear'] == 1) {
+                    // Build the query.
+                    $this->query .= " ORDER BY year DESC;";
+                }
+            } else if (isset($_GET['orderByColor'])) {
+                if($_GET['orderByColor'] == 0){
+                    // Build the query.
+                    $this->query .= " ORDER BY color ASC;";
+                } else if ($_GET['orderByColor'] == 1) {
+                    // Build the query.
+                    $this->query .= " ORDER BY color DESC;";
+                }
+            } else if (isset($_GET['orderByMileage'])) {
+                if($_GET['orderByMileage'] == 0){
+                    // Build the query.
+                    $this->query .= " ORDER BY mileage ASC;";
+                } else if ($_GET['orderByMileage'] == 1) {
+                    // Build the query.
+                    $this->query .= " ORDER BY mileage DESC;";
+                }
+            } else if (isset($_GET['orderByType'])) {
+                if($_GET['orderByType'] == 0){
+                    // Build the query.
+                    $this->query .= " ORDER BY type ASC;";
+                } else if ($_GET['orderByType'] == 1) {
+                    // Build the query.
+                    $this->query .= " ORDER BY type DESC;";
+                }
+            } else if (isset($_GET['orderByPrice'])) {
+                if($_GET['orderByPrice'] == 0){
+                    // Build the query.
+                    $this->query .= " ORDER BY price ASC;";
+                } else if ($_GET['orderByPrice'] == 1) {
+                    // Build the query.
+                    $this->query .= " ORDER BY price DESC;";
+                }
+            } else if (isset($_GET['orderByTransmission'])) {
+                if($_GET['orderByTransmission'] == 0){
+                    // Build the query.
+                    $this->query .= " ORDER BY transmission ASC;";
+                } else if ($_GET['orderByTransmission'] == 1) {
+                    // Build the query.
+                    $this->query .= " ORDER BY transmission DESC;";
+                }
+            } else if (isset($_GET['orderByDrive'])) {
+                if($_GET['orderByDrive'] == 0){
+                    // Build the query.
+                    $this->query .= " ORDER BY drive ASC;";
+                } else if ($_GET['orderByDrive'] == 1) {
+                    // Build the query.
+                    $this->query .= " ORDER BY drive DESC;";
                 }
             }
 
