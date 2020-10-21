@@ -381,7 +381,7 @@ class InventoryGateway {
 
             // Check if any rows were added.
             if($this->query->rowCount() == 1) {
-                return "The vehical has been added to the inventory.";
+                return "The vehicle has been added to the inventory.";
             } else {
                 return "Sorry, we did not find any matches. No items where added.";
             }
@@ -411,7 +411,7 @@ class InventoryGateway {
 
             // Check if any rows where deleted.
             if($this->query->rowCount() == 1) {
-                return "The vehical has been removed from the inventory.";
+                return "The vehicle has been removed from the inventory.";
             } else {
                 return "Sorry, we did not find any matches. No items where deleted.";
             }
@@ -470,7 +470,7 @@ class InventoryGateway {
             
             // Check if any rows where deleted.
             if($this->query->rowCount() == 1) {
-                return "The vehical has been updated in the inventory.";
+                return "The vehicle has been updated in the inventory.";
             } else {
                 return "Sorry, we did not find any matches. No items where updated.";
             }
