@@ -1,4 +1,6 @@
 <?php
+// Author: Christopher Orsolini
+
 require './Database.php';
 require './InventoryController.php';
 

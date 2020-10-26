@@ -1,4 +1,6 @@
 <?php
+// Author: Christopher Orsolini
+
   class Database {
     private $host = 'XXXXX';
     private $db_name = 'XXXXX';
