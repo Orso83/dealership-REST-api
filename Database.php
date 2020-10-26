@@ -1,9 +1,9 @@
 <?php
   class Database {
-    private $host = 'localhost';
-    private $db_name = 'dealership';
-    private $username = 'public_web_user';
-    private $password = '1234';
+    private $host = 'XXXXX';
+    private $db_name = 'XXXXX';
+    private $username = 'XXXXX';
+    private $password = 'XXXXX';
     private $conn;
 
     public function connect() {
